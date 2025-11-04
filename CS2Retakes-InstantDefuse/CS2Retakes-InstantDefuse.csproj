@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <RootNamespace>CS2Retakes_InstantDefuse</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ModSharp.Sharp.Shared" Version="*" PrivateAssets="all" />
+        <PackageReference Include="ModSharp.Sharp.Extensions.GameEventManager" Version="*" />
+    </ItemGroup>
+</Project>
