@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using CS2Retakes_InstantDefuse.Utils;
+using CS2Retakes.InstantDefuse.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sharp.Extensions.GameEventManager;
@@ -11,9 +11,8 @@ using Sharp.Shared.GameEntities;
 using Sharp.Shared.GameEvents;
 using Sharp.Shared.Listeners;
 using Sharp.Shared.Objects;
-using Sharp.Shared.Units;
 
-namespace CS2Retakes_InstantDefuse;
+namespace CS2Retakes.InstantDefuse;
 
 public class Main : IModSharpModule, IGameListener
 {
@@ -140,19 +139,17 @@ public class Main : IModSharpModule, IGameListener
     {
         if (ev is not IEventBombBeginDefuse e)
             return;
-
-        var player = e.UserId;
-
-        AttemptInstantDefuse(player);
-    }
-
-    private void AttemptInstantDefuse(UserID player)
-    {
-        if (!_bombTicking)
+        
+        var pawn = e.Pawn;
+        if (pawn is null)
             return;
         
-        var defuser = _sharedSystem.GetClientManager().GetGameClient(player);
-        if (defuser is null)
+        AttemptInstantDefuse(pawn);
+    }
+
+    private void AttemptInstantDefuse(IPlayerPawn defuser)
+    {
+        if (!_bombTicking)
             return;
         
         var plantedBomb = FindPlantedBomb();
@@ -175,7 +172,7 @@ public class Main : IModSharpModule, IGameListener
                                       (_sharedSystem.GetModSharp().GetGlobals().CurTime - _bombPlantedTime);
         var defuseLength = plantedBomb.GetNetVar<float>("m_flDefuseLength");
         if ((int)defuseLength != 5 && (int)defuseLength != 10)
-            defuseLength = _sharedSystem.GetEntityManager().FindPlayerPawnBySlot(defuser.Slot)?.GetItemService()?
+            defuseLength = defuser.GetItemService()?
                 .HasDefuser ?? false
                 ? 5.0f
                 : 10.0f;
